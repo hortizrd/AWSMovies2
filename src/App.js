@@ -1,26 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react'
 import './App.css';
+import './bootstrap.min.css';
+import { Title } from './components/Title';
+import { SearchForm } from './components/SearchForm';
+import {Movie} from './components/Movie'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+class App extends Component {
+  state = { results: []  };
+  _handleResults = (results) => {
+    this.setState({ results });
+  };
+
+  _renderResults() {
+    const { results } = this.state;
+    return results.map(movie => {
+      return(
+        <Movie
+        key={movie.imdbID}
+        title={movie.Title}
+        year={movie.Year}
+        poster={movie.Poster}
+        />
+      
+      ) 
+    });
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <Title>Search Movies</Title>
+          <div className="container">
+            
+              <SearchForm onResults={this._handleResults} />
+            </div>
+         
+          
+        </header>
+        <div>
+            {this.state.results.length  === 0
+            
+            ? <p>Not Found</p>
+             : this._renderResults()
+            }
+          </div>
+      </div>
+    );
+  }
 }
 
 export default App;
